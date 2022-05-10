@@ -279,8 +279,6 @@ def do_epoch(args, mode: str, net: Any, device: Any, epc: int,
     target_vec = [dice_3d_log, dice_3d_sd_log, asd_3d_log, asd_3d_sd_log, hd_3d_log, hd_3d_sd_log, dice_2d]
     hard_size_mean = torch.index_select(all_sizes2, 1, indices).mean(dim=0).cpu().numpy()
     soft_size_mean = torch.index_select(all_sizes, 1, indices).mean(dim=0).cpu().numpy()
-    #mom_med = all_moments_pred.mean(dim=0).cpu().numpy().tolist()
-    #mom_med0 = all_moments_pred0.mean(dim=0).cpu().numpy().tolist()
     if args.med:
         mom_est = get_mom_posmed(C, all_moments_pred, all_sizes2, args.th)
         mom_est0 = get_mom_posmed(C, all_moments_pred0, all_sizes2, args.th)
@@ -288,12 +286,10 @@ def do_epoch(args, mode: str, net: Any, device: Any, epc: int,
         mom_est = get_mom_posav(C, all_moments_pred, all_sizes2, args.th)
         mom_med_gt = get_mom_posav(C, all_moments_gt, all_sizes2, args.th)
         mom_med_gt0 = get_mom_posav(C, all_moments_gt0, all_sizes2, args.th)
-        #print(mom_med_gt0,mom_med_gt)
         mom_est0 = get_mom_posav(C, all_moments_pred0, all_sizes2, args.th)
     if args.update_lin_reg:
         mom_coef = get_linreg_coef(C, all_moments_pred, all_sizes2, args.th)
         mom_coef0 = get_linreg_coef(C, all_moments_pred0, all_sizes2, args.th)
-        #print(mom_coef)
     size_gt_mean = torch.index_select(all_gt_sizes, 1, indices).mean(dim=0).cpu().numpy()
     mask_pos = torch.index_select(all_sizes2, 1, indices) != 0
     gt_pos = torch.index_select(all_gt_sizes, 1, indices) != 0
